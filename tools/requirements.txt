@@ -1,0 +1,13 @@
+aenum
+atomicwrites
+futures
+libarchive
+lru-dict
+matplotlib
+numpy
+opencv-python
+pygame
+hexdump
+pycurl
+tenacity
+av==0.5.0
