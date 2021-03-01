@@ -1,0 +1,33 @@
+import os
+
+from cffi import FFI
+from common.ffi_wrapper import suffix
+
+mpc_dir = os.path.dirname(os.path.abspath(__file__))
+libmpc_fn = os.path.join(mpc_dir, "libmpc"+suffix())
+
+ffi = FFI()
+ffi.cdef("""
+typedef struct {
+    double x, y, psi, dpsi, ddpsi;
+} state_t;
+
+typedef struct {
+    double x[21];
+    double y[21];
+    double psi[21];
+    double dpsi[21];
+    double ddpsi[20];
+    double cost;
+} log_t;
+
+void init(double pathCost, double yawRateCost, double steerRateCost);
+void init_weights(double pathCost, double yawRateCost, double steerRateCost);
+int run_mpc(state_t * x0, log_t * solution,
+             double y_pts[17],
+             double dpsi_pts[17],
+             double ddpsi_pts[17],
+             double v_ref );
+""")
+
+libmpc = ffi.dlopen(libmpc_fn)
