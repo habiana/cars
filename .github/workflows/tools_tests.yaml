@@ -1,0 +1,25 @@
+name: tools
+on:
+  push:
+  pull_request:
+
+jobs:
+  plotjuggler:
+    name: plotjuggler
+    runs-on: ubuntu-20.04
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Install plotjuggler snap
+      run: sudo snap install plotjuggler
+    - name: Unit test
+      run: |
+        pip3 install pycapnp
+        sudo apt install libcurl4-openssl-dev libssl-dev
+        pip3 install pycurl
+        pip3 install tenacity
+        pip3 install atomicwrites
+        export PYTHONPATH="${PYTHONPATH}:/home/runner/work/openpilot/openpilot"
+        tools/plotjuggler/test_plotjuggler.py
